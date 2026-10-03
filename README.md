@@ -1,44 +1,75 @@
-# Simple Sales Dashboard Design
+# 📊 Simple Sales Dashboard
 
-## Project Overview
+An interactive sales dashboard project built using HTML, CSS, and JavaScript to explore sales performance across products, regions, and months.
 
-This project focuses on designing a simple and interactive sales dashboard to analyze business performance by product, region, and month.
+## 🌐 Live Dashboard
 
-## Objectives
+**[Click Here to View the Live Dashboard](https://yk6144567-wq.github.io/simple-sales-dashboard/dashboard/)**
 
-* Analyze total sales and profit.
-* Identify top-performing products and regions.
-* Track monthly sales trends.
-* Present business KPIs through charts and filters.
+## 🎯 Project Objective
 
-## Key Performance Indicators (KPIs)
+The objective of this project is to transform sample sales data into an interactive dashboard that makes business performance easier to understand.
 
-* Total Sales
-* Total Profit
-* Units Sold
-* Profit Margin
+## 📌 Key Performance Indicators (KPIs)
 
-## Dashboard Visualizations
+* **Total Sales:** Total revenue generated.
+* **Total Profit:** Profit after accounting for recorded losses.
+* **Units Sold:** Total quantity of products sold.
+* **Profit Margin:** Profit as a percentage of sales.
 
-* Monthly Sales Trend
-* Sales by Region
-* Sales by Product Category
+## 📈 Dashboard Visualizations
 
-## Interactive Filters
+1. Sales by Region — Bar Chart
+2. Monthly Sales Trend — Line Chart
+3. Sales by Category — Bar Chart
 
-* Region
-* Month
+## 🔎 Interactive Features
 
-## Tools
+* Filter sales by region.
+* Filter sales by month.
+* View updated KPIs and charts based on selected filters.
+* Responsive dashboard layout.
 
-* GitHub
-* Excel
-* Sample sales data
+## 🛠️ Tools and Technologies
 
-## Expected Outcome
+* HTML — Dashboard structure
+* CSS — Styling and responsive layout
+* JavaScript — Data calculations, charts, and interactive filters
+* GitHub — Version control and project hosting
+* GitHub Pages — Website deployment
 
-A clear and interactive dashboard that helps users understand sales performance and explore business trends.
+## 📂 Project Structure
 
-## Project Status
+```text
+simple-sales-dashboard/
+├── dashboard/
+│   ├── index.html
+│   ├── KPI_Analysis.md
+│   └── README.md
+├── data/
+│   └── README.md
+├── sales_data.csv
+├── README.md
+└── Sales_Dashboard_Report.md
+```
 
-In Progress
+## 🗂️ Dataset
+
+The project uses a sample dataset created for learning and demonstration. It contains order dates, products, categories, regions, sales, profit, and quantities.
+
+## 💡 Learning Outcomes
+
+* Understanding business KPIs
+* Basic sales data analysis
+* Data visualization and dashboard design
+* Interactive filtering using JavaScript
+* Publishing a website with GitHub Pages
+* Organizing and documenting a project on GitHub
+
+## 🚀 Project Status
+
+Dashboard published successfully. The project demonstrates interactive visualization using sample sales data.
+
+## 👤 Author
+
+Yash Kumar
