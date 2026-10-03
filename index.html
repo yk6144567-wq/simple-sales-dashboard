@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simple Sales Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#f1f5f9;color:#172554;font-family:Arial,sans-serif}
+header{background:#173b70;color:white;padding:24px;border-radius:14px;margin-bottom:20px}
+header p{color:#dbeafe}
+.filters,.cards,.charts{display:grid;gap:16px;margin-bottom:20px}
+.filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+.charts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.panel,.card{background:white;padding:20px;border-radius:12px;box-shadow:0 2px 8px #0f172a0d}
+label{display:block;margin-bottom:8px;font-size:13px}
+select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:7px;background:white}
+.metric{font-size:25px;font-weight:bold;margin-top:12px}
+.muted{color:#64748b;font-size:13px}
+.bar-row{display:grid;grid-template-columns:85px 1fr;gap:10px;align-items:center;margin:14px 0;font-size:13px}
+.bar{height:20px;background:#dbeafe;border-radius:4px;overflow:hidden}
+.fill{height:100%;background:#2563eb}
+svg{width:100%;height:auto;overflow:visible}
+@media(max-width:700px){body{padding:12px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.charts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+<h1>Sales Performance Dashboard</h1>
+<p>Explore sales, profit, products and regions</p>
+</header>
+
+<section class="filters">
+<div class="panel">
+<label for="region">Filter by Region</label>
+<select id="region"><option value="All">All Regions</option><option>East</option><option>West</option><option>North</option><option>South</option></select>
+</div>
+<div class="panel">
+<label for="month">Filter by Month</label>
+<select id="month"><option value="All">All Months</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option></select>
+</div>
+</section>
+
+<section class="cards">
+<div class="card"><div class="muted">Total Sales</div><div class="metric" id="sales">—</div></div>
+<div class="card"><div class="muted">Total Profit</div><div class="metric" id="profit">—</div></div>
+<div class="card"><div class="muted">Units Sold</div><div class="metric" id="units">—</div></div>
+<div class="card"><div class="muted">Profit Margin</div><div class="metric" id="margin">—</div></div>
+</section>
+
+<section class="charts">
+<div class="panel"><h3>Sales by Region</h3><div id="regions"></div></div>
+<div class="panel"><h3>Monthly Sales Trend</h3><svg id="trend" viewBox="0 0 400 210" role="img" aria-label="Monthly sales line chart"></svg></div>
+<div class="panel"><h3>Sales by Category</h3><div id="categories"></div></div>
+<div class="panel"><h3>About this Dashboard</h3><p class="muted">Sample project data for learning dashboard design. Use the region and month filters to explore the figures.</p></div>
+</section>
+
+<script>
+const data=[
+["2026-01-05","Laptop","Technology","East",50000,8000,2],
+["2026-01-12","Phone","Technology","West",30000,5000,3],
+["2026-01-18","Chair","Furniture","North",8000,1200,4],
+["2026-02-03","Table","Furniture","South",12000,1500,2],
+["2026-02-10","Monitor","Technology","East",15000,2500,3],
+["2026-02-16","Notebook","Office Supplies","West",2000,400,10],
+["2026-03-04","Desk","Furniture","North",10000,1000,2],
+["2026-03-11","Keyboard","Technology","South",3000,600,5],
+["2026-03-19","Printer","Office Supplies","East",9000,1200,1],
+["2026-04-02","Phone","Technology","North",25000,4000,2],
+["2026-04-13","Chair","Furniture","West",6000,-500,3],
+["2026-04-22","Notebook","Office Supplies","South",1500,300,8],
+["2026-05-06","Laptop","Technology","East",45000,7000,2],
+["2026-05-14","Table","Furniture","North",14000,2000,2],
+["2026-05-25","Printer","Office Supplies","West",7000,800,1],
+["2026-06-08","Monitor","Technology","South",18000,3000,3],
+["2026-06-17","Desk","Furniture","East",11000,1500,2],
+["2026-06-26","Keyboard","Technology","West",4000,700,6]
+].map(r=>({date:r[0],product:r[1],category:r[2],region:r[3],sales:r[4],profit:r[5],qty:r[6]}));
+
+const money=n=>"₹"+Math.round(n).toLocaleString("en-IN");
+const names=["January","February","March","April","May","June"];
+function barChart(el,groups){
+const max=Math.max(1,...Object.values(groups));
+document.getElementById(el).innerHTML=Object.entries(groups).map(([name,val])=>
+`<div class="bar-row"><span>${name}</span><div><div class="bar"><div class="fill" style="width:${Math.max(0,val)/max*100}%"></div></div><div class="muted">${money(val)}</div></div></div>`
+).join("")||"No data";
+}
+function render(){
+const region=document.getElementById("region").value;
+const month=document.getElementById("month").value;
+const rows=data.filter(r=>(region==="All"||r.region===region)&&(month==="All"||r.date.slice(5,7)===month));
+const sum=key=>rows.reduce((a,r)=>a+r[key],0);
+const sales=sum("sales"),profit=sum("profit");
+document.getElementById("sales").textContent=money(sales);
+document.getElementById("profit").textContent=money(profit);
+document.getElementById("units").textContent=sum("qty").toLocaleString("en-IN");
+document.getElementById("margin").textContent=(sales?profit/sales*100:0).toFixed(2)+"%";
+const regions={},cats={},months={};
+rows.forEach(r=>{
+regions[r.region]=(regions[r.region]||0)+r.sales;
+cats[r.category]=(cats[r.category]||0)+r.sales;
+const m=Number(r.date.slice(5,7))-1;
+months[m]=(months[m]||0)+r.sales;
+});
+barChart("regions",regions);
+barChart("categories",cats);
+const points=names.map((name,i)=>({name,val:months[i]||0}));
+const max=Math.max(1,...points.map(p=>p.val));
+const coords=points.map((p,i)=>`${35+i*66},${165-p.val/max*125}`);
+document.getElementById("trend").innerHTML=
+[0,1,2,3].map(i=>`<line x1="30" y1="${40+i*40}" x2="385" y2="${40+i*40}" stroke="#e2e8f0"/>`).join("")+
+`<polyline points="${coords.join(" ")}" fill="none" stroke="#2563eb" stroke-width="3"/>`+
+points.map((p,i)=>`<circle cx="${35+i*66}" cy="${165-p.val/max*125}" r="4" fill="#2563eb"/><text x="${35+i*66}" y="190" font-size="10" text-anchor="middle" fill="#64748b">${p.name.slice(0,3)}</text>`).join("");
+}
+document.getElementById("region").addEventListener("change",render);
+document.getElementById("month").addEventListener("change",render);
+render();
+</script>
+</body>
+</html>
